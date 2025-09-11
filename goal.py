@@ -1,8 +1,10 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
-@dataclass(frozen=True) # Inmutable classes
+
+@dataclass(frozen=True)  # Inmutable classes
 class Goal:
     """Defines the agent's behavior. Describes what the agent must do and how has to do it"""
+
     priority: int
     name: str
     description: str
