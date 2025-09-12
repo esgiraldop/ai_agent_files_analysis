@@ -1,20 +1,11 @@
-from action import Action
 import traceback
 import typing
-from pydantic import validate_call, BaseModel
 from datetime import datetime
 
+from pydantic import validate_call
 
-class SuccessResultType(BaseModel):
-    tool_executed: bool
-    result: typing.Any
-    timestamp: str
-
-
-class ErrorResultType(BaseModel):
-    tool_executed: bool
-    error: str
-    traceback: str
+from action import Action
+from game_types import ErrorResultType, SuccessResultType
 
 
 class Environment:

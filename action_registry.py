@@ -1,9 +1,9 @@
-from action import Action
-from pydantic import validate_call, Field, TypeAdapter
+from pydantic import Field, validate_call
 from pydantic.dataclasses import dataclass
 
-action_adapter = TypeAdapter(Action | None)
-action_list_adapter = TypeAdapter(list[Action])
+from action import Action
+
+from game_types import action_adapter, action_list_adapter
 
 
 @dataclass

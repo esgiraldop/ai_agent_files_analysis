@@ -7,7 +7,8 @@ class Goal:
 
     priority: int
     name: str
-    description: str
+    content: str
+    role: str
 
     ## Not necessary since dataclass creates this automatically
     # def __init__(self, priority, name, description):

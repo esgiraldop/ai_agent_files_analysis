@@ -1,8 +1,8 @@
 import os
-from pydantic import validate_call, TypeAdapter
 
-string_adapter = TypeAdapter(str)
-list_of_tuples_adapter = TypeAdapter(list[tuple[int, str]])
+from pydantic import validate_call
+
+from game_types import list_of_tuples_adapter, string_adapter
 
 
 def list_files() -> list:
@@ -27,3 +27,9 @@ def search_in_file(file_name: str, search_term: str) -> list[str]:
                 results.append((i + 1, line.strip()))
 
     return list_of_tuples_adapter.validate_python(results)
+
+
+@validate_call
+def terminate(message: str) -> None:
+    """Terminate the agent loop and provide a summary message."""
+    print(f"Termination message: {message}")
