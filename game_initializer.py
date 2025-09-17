@@ -3,8 +3,8 @@ from action_registry import ActionRegistry
 from action import Action
 import action_functions as act_funcs
 from memory import Memories
-from game_types import Memory
-
+from game_types import Memory, Properties, PropertiesArgument, ActionParametersModel
+from environment import Environment
 # Initializing goals
 
 file_management_goal = Goal(
@@ -47,7 +47,11 @@ actions_registry.register(
         name="list_files",
         function=act_funcs.list_files,
         description="List all files in the current directory",
-        parameters={"type": "object", "properties": {}, "required": []},
+        parameters=ActionParametersModel(
+            type="object",
+            properties=Properties(),
+            required=[],
+        ),
         terminal=False,
     )
 )
@@ -57,16 +61,16 @@ actions_registry.register(
         name="read_file",
         function=act_funcs.read_file,
         description="Read the contents of a specific file",
-        parameters={
-            "type": "object",
-            "properties": {
-                "file_name": {
-                    "type": "string",
-                    "description": "Name of the file to read",
-                }
-            },
-            "required": ["file_name"],
-        },
+        parameters=ActionParametersModel(
+            type="object",
+            properties=Properties(
+                file_name=PropertiesArgument(
+                    type="string",
+                    description="Name of the file to read",
+                )
+            ),
+            required=["file_name"],
+        ),
         terminal=False,
     )
 )
@@ -76,17 +80,20 @@ actions_registry.register(
         name="search_in_file",
         function=act_funcs.search_in_file,
         description="Search for a term in a specific file",
-        parameters={
-            "type": "object",
-            "properties": {
-                "file_name": {
-                    "type": "string",
-                    "description": "Name of the file to search in",
-                },
-                "search_term": {"type": "string", "description": "Term to search for"},
-            },
-            "required": ["file_name", "search_term"],
-        },
+        parameters=ActionParametersModel(
+            type="object",
+            properties=Properties(
+                file_name=PropertiesArgument(
+                    type="string",
+                    description="Name of the file to search in",
+                ),
+                search_term=PropertiesArgument(
+                    type="string",
+                    description="Term to search for",
+                ),
+            ),
+            required=["file_name", "search_term"],
+        ),
         terminal=False,
     )
 )
@@ -96,16 +103,19 @@ actions_registry.register(
         name="terminate",
         function=act_funcs.terminate,
         description="Terminate the agent loop and provide a summary message",
-        parameters={
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "description": "Message to display when the agent finishes",
-                },
-            },
-            "required": ["message"],
-        },
+        parameters=ActionParametersModel(
+            type="object",
+            properties=Properties(
+                message=PropertiesArgument(
+                    type="string",
+                    description="Message to display when the agent finishes",
+                ),
+            ),
+            required=["message"],
+        ),
         terminal=False,
     )
 )
+
+# Initializing environment
+actions_environment = Environment()

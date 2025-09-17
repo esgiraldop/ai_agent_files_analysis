@@ -2,7 +2,7 @@ import typing
 
 from pydantic.dataclasses import dataclass
 
-from game_types import Parameters
+from game_types import ActionParametersModel
 
 
 @dataclass
@@ -12,14 +12,14 @@ class Action:
     name: str
     function: typing.Callable
     description: str
-    parameters: Parameters
+    parameters: ActionParametersModel
     terminal: bool = False
 
     def execute(self, **args: typing.Any) -> typing.Any:
         """Execute the action's function"""
         return self.function(**args)
 
-    def to_litellm_schema(self, type: str) -> dict:
+    def to_litellm_schema(self) -> dict:
         """
         Convert Action into the dict format expected by LLM APIs (LiteLLM).
         """

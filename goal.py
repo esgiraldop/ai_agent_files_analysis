@@ -1,5 +1,7 @@
 from pydantic.dataclasses import dataclass
 
+from game_types import RoleEnum
+
 
 @dataclass(frozen=True)  # Inmutable classes
 class Goal:
@@ -8,7 +10,7 @@ class Goal:
     priority: int
     name: str
     content: str
-    role: str
+    role: RoleEnum
 
     ## Not necessary since dataclass creates this automatically
     # def __init__(self, priority, name, description):
