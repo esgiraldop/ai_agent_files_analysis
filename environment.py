@@ -19,7 +19,7 @@ class Environment:
         """Execute and action and return the result."""
         try:
             result = action.execute(**args)
-            return self.format_result(result)
+            return self.format_result(result, action.name)
         except Exception as e:
             return ErrorResultType(
                 tool_executed=False,
@@ -28,9 +28,10 @@ class Environment:
             )
 
     @validate_call
-    def format_result(self, result: typing.Any) -> SuccessResultType:
+    def format_result(self, result: typing.Any, tool_name: str) -> SuccessResultType:
         """Format the result with metadata."""
         return SuccessResultType(
+            tool_name=tool_name,
             tool_executed=True,
             result=result,
             timestamp=datetime.now().isoformat(),

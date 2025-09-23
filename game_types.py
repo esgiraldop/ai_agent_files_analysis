@@ -41,7 +41,7 @@ class ErrorResultType(BaseModel):
 
 class Memory(BaseModel):
     role: RoleEnum
-    content: SuccessResultType | ErrorResultType | str
+    content: SuccessResultType | ErrorResultType
 
 
 class PropertiesArgument(BaseModel):

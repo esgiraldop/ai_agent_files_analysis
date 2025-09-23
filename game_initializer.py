@@ -1,31 +1,45 @@
-from goal import Goal
-from action_registry import ActionRegistry
-from action import Action
+from datetime import datetime
+
 import action_functions as act_funcs
-from memory import Memories
-from game_types import Memory, Properties, PropertiesArgument, ActionParametersModel
+from action import Action
+from action_registry import ActionRegistry
 from environment import Environment
+from game_types import (
+    ActionParametersModel,
+    Memory,
+    Properties,
+    PropertiesArgument,
+    SuccessResultType,
+)
+from goal import Goal
+from memory import Memories
+
 # Initializing goals
 
-file_management_goal = Goal(
-    priority=1,
-    name="file_management",
-    content="""Manage files in the current directory by:
-        1. Listing files when needed
-        2. Reading file contents when needed
-        3. Searching within files when information is required
-        4. Providing helpful explanations about file contents""",
-    role="system",
-)
+# file_management_goal = Goal(
+#     priority=1,
+#     name="file_management",
+#     content="""Manage files in the current directory by:
+#         1. Listing files when needed
+#         2. Reading file contents when needed
+#         3. Searching within files when information is required
+#         4. Providing helpful explanations about file contents""",
+#     role="system",
+# )
 
 file_reading_goal = Goal(
     priority=1,
     name="file_reading",
-    content="""
-    You are an AI agent that can perform tasks by using available tools.
-    If a user asks about files, documents, or content, first list the files before reading them.
-    When you are done, terminate the conversation by using the "terminate" tool and I will provide
-    the results to the user.""",
+    content=SuccessResultType(
+        tool_name="",
+        tool_executed=True,
+        result="""
+            You are an AI agent that can perform tasks by using available tools.
+            If a user asks about files, documents, or content, first list the files before reading them.
+            When you are done, terminate the conversation by using the "terminate" tool and I will provide
+            the results to the user.""",
+        timestamp=datetime.now().isoformat(),
+    ),
     role="system",
 )
 
