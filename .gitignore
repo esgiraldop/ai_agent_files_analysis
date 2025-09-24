@@ -23,3 +23,9 @@ __pycache__/
 # Visual Studio Code
 .vscode/
 *.vscode/
+
+# Files folder
+files_to_analyze/
+
+# Miscellaneous files
+.DS_Store
