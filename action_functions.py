@@ -4,10 +4,12 @@ from pydantic import validate_call
 
 from game_types import list_of_tuples_adapter, string_adapter
 
+files_folder = "files_to_analyze/"
+
 
 def list_files() -> list:
     """List all files in the current directory."""
-    return os.listdir(".")
+    return os.listdir(files_folder)
 
 
 @validate_call

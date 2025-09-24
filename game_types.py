@@ -12,7 +12,6 @@ string_adapter = TypeAdapter(str)
 list_of_tuples_adapter = TypeAdapter(list[tuple[int, str]])
 action_adapter = TypeAdapter("Action | None")
 action_list_adapter = TypeAdapter(list["Action"])
-dict_list_adapter = TypeAdapter(list[dict])
 str_list_adapter = TypeAdapter(list[str])
 
 
@@ -41,7 +40,7 @@ class ErrorResultType(BaseModel):
 
 class Memory(BaseModel):
     role: RoleEnum
-    content: SuccessResultType | ErrorResultType
+    content: str
 
 
 class PropertiesArgument(BaseModel):

@@ -1,6 +1,6 @@
 from pydantic.dataclasses import dataclass
 
-from game_types import RoleEnum, SuccessResultType, ErrorResultType
+from game_types import RoleEnum
 
 
 @dataclass(frozen=True)  # Inmutable classes
@@ -8,8 +8,7 @@ class Goal:
     """Defines the agent's behavior. Describes what the agent must do and how has to do it"""
 
     priority: int
-    name: str
-    content: SuccessResultType | ErrorResultType
+    content: str
     role: RoleEnum
 
     ## Not necessary since dataclass creates this automatically

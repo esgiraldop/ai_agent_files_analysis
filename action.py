@@ -1,5 +1,5 @@
 import typing
-
+import json
 from pydantic.dataclasses import dataclass
 
 from game_types import ActionParametersModel
@@ -19,19 +19,21 @@ class Action:
         """Execute the action's function"""
         return self.function(**args)
 
-    def to_litellm_schema(self) -> dict:
+    def to_litellm_schema(self) -> str:
         """
         Convert Action into the dict format expected by LLM APIs (LiteLLM).
         """
-        return {
-            "type": "function",
-            "function": {
-                "name": self.name,
-                "description": self.description,
-                "parameters": {
-                    "type": self.parameters.type,
-                    "properties": self.parameters.properties.model_dump(),
-                    "required": self.parameters.required,
+        return json.dumps(
+            {
+                "type": "function",
+                "function": {
+                    "name": self.name,
+                    "description": self.description,
+                    "parameters": {
+                        "type": self.parameters.type,
+                        "properties": self.parameters.properties.model_dump(),
+                        "required": self.parameters.required,
+                    },
                 },
-            },
-        }
+            }
+        )

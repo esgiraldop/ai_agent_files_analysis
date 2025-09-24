@@ -6,7 +6,6 @@ from action import Action
 from game_types import (
     action_adapter,
     action_list_adapter,
-    dict_list_adapter,
     str_list_adapter,
 )
 
@@ -35,8 +34,8 @@ class ActionRegistry:
             [action.name for action in self.get_actions()]
         )
 
-    def get_actions_llm_schema(self) -> list[dict]:
+    def get_actions_llm_schema(self) -> list[str]:
         """Get all registered actions in the dict format expected by LLM APIs (LiteLLM)."""
-        return dict_list_adapter.validate_python(
+        return str_list_adapter.validate_python(
             [action.to_litellm_schema() for action in self.get_actions()]
         )

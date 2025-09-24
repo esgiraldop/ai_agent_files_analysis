@@ -1,24 +1,31 @@
 import json
 import traceback
 
-from litellm import _turn_on_debug, completion
+from litellm import _turn_on_debug, completion  # noqa: F401
 from pydantic import validate_call
 from pydantic_core import to_jsonable_python
 
 import env_config  # noqa: F401
-from game_initializer import actions_environment, actions_registry, memories
+from game_initializer import (
+    actions_environment,
+    actions_registry,
+    memories,
+    file_reading_goal,
+)
 from game_types import (
     ErrorResultType,
     Memory,
 )
 
-_turn_on_debug()
+# _turn_on_debug() # Uncomment for verbose litellm
 
 
 @validate_call
 def agent_loop(iteration: int, max_iterations: int, model=str):
     while iteration < max_iterations:
-        messages = [to_jsonable_python(msg) for msg in memories.get_memories()]
+        messages = [to_jsonable_python(file_reading_goal)] + [
+            to_jsonable_python(msg) for msg in memories.get_memories()
+        ]
         tools = actions_registry.get_actions_llm_schema()
 
         response = completion(
@@ -45,8 +52,15 @@ def agent_loop(iteration: int, max_iterations: int, model=str):
 
                 memories.add_memory(
                     Memory(
+                        role="assistant",
+                        content=action.to_litellm_schema(),
+                    )
+                )
+
+                memories.add_memory(
+                    Memory(
                         role="user",
-                        content=result,
+                        content=result.model_dump(),
                     )
                 )
 
