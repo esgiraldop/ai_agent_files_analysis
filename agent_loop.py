@@ -9,8 +9,8 @@ import env_config  # noqa: F401
 from game_initializer import (
     actions_environment,
     actions_registry,
-    memories,
     file_reading_goal,
+    memories,
 )
 from game_types import (
     ErrorResultType,
@@ -33,18 +33,25 @@ def agent_loop(iteration: int, max_iterations: int, model=str):
             messages=messages,
             tools=tools,
             max_tokens=1024,
+            tool_choice="required",
         )
-
+        print(
+            f"\n\nThis is the content of the llm response: ''{response.choices[0].message.content}''\n\n"
+        )
         if response.choices[0].message.tool_calls:
             for tool in response.choices[0].message.tool_calls:
+                actions = []
+                results = []
                 tool_name = tool.function.name
                 tool_args = json.loads(tool.function.arguments)
+
+                action = actions_registry.get_action(tool_name)
+                actions.append(action.to_litellm_schema())
 
                 if tool_name == "terminate":
                     print(f"Termination message: {tool_args['message']}")
                     break
                 elif tool_name in actions_registry.get_actions_names():
-                    action = actions_registry.get_action(tool_name)
                     result = actions_environment.execute_actions(action, tool_args)
                 else:
                     result = ErrorResultType(
@@ -52,23 +59,24 @@ def agent_loop(iteration: int, max_iterations: int, model=str):
                         error=f"Unknown tool: {tool_name}",
                         traceback=traceback.format_exc(),
                     )
-
-                memories.add_memory(
-                    Memory(
-                        role="assistant",
-                        content=json.dumps(action.to_litellm_schema()),
-                    )
-                )
-
-                memories.add_memory(
-                    Memory(
-                        role="user",
-                        content=json.dumps(result.model_dump()),
-                    )
-                )
-
+                results.append(result.model_dump())
                 print(f"Executing: {tool_name} with args {tool_args}")
                 print(f"Result: {result}")
+
+            memories.add_memory(
+                Memory(
+                    role="assistant",
+                    content=json.dumps(actions),
+                )
+            )
+
+            memories.add_memory(
+                Memory(
+                    role="user",
+                    content=json.dumps(results),
+                )
+            )
+
         else:
             result = response.choices[0].message.content
             print(f"Response: {result}")

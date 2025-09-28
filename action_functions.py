@@ -15,7 +15,7 @@ def list_files() -> list:
 @validate_call
 def read_file(file_name: str) -> str:
     """Reads the content of a specific file in the current directory"""
-    with open(file_name, "r") as f:
+    with open(os.path.join(files_folder, file_name), "r") as f:
         return string_adapter.validate_python(f.read())
 
 
@@ -23,7 +23,7 @@ def read_file(file_name: str) -> str:
 def search_in_file(file_name: str, search_term: str) -> list[str]:
     """Search for a term in a file and return matching lines."""
     results = []
-    with open(file_name, "r") as f:
+    with open(os.path.join(files_folder, file_name), "r") as f:
         for i, line in enumerate(f.readlines()):
             if search_term in line:
                 results.append((i + 1, line.strip()))
