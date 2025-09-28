@@ -17,7 +17,7 @@ from game_types import (
     Memory,
 )
 
-# _turn_on_debug() # Uncomment for verbose litellm
+# _turn_on_debug()  # Uncomment for verbose litellm
 
 
 @validate_call
@@ -29,7 +29,10 @@ def agent_loop(iteration: int, max_iterations: int, model=str):
         tools = actions_registry.get_actions_llm_schema()
 
         response = completion(
-            model=model, messages=messages, tools=tools, max_tokens=1024
+            model=model,
+            messages=messages,
+            tools=tools,
+            max_tokens=1024,
         )
 
         if response.choices[0].message.tool_calls:
@@ -53,14 +56,14 @@ def agent_loop(iteration: int, max_iterations: int, model=str):
                 memories.add_memory(
                     Memory(
                         role="assistant",
-                        content=action.to_litellm_schema(),
+                        content=json.dumps(action.to_litellm_schema()),
                     )
                 )
 
                 memories.add_memory(
                     Memory(
                         role="user",
-                        content=result.model_dump(),
+                        content=json.dumps(result.model_dump()),
                     )
                 )
 

@@ -22,6 +22,7 @@ class Environment:
             return self.format_result(result, action.name)
         except Exception as e:
             return ErrorResultType(
+                tool_name=action.name,
                 tool_executed=False,
                 error=str(e),
                 traceback=traceback.format_exc(),

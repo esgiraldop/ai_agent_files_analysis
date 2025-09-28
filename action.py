@@ -19,21 +19,19 @@ class Action:
         """Execute the action's function"""
         return self.function(**args)
 
-    def to_litellm_schema(self) -> str:
+    def to_litellm_schema(self) -> dict:
         """
         Convert Action into the dict format expected by LLM APIs (LiteLLM).
         """
-        return json.dumps(
-            {
-                "type": "function",
-                "function": {
-                    "name": self.name,
-                    "description": self.description,
-                    "parameters": {
-                        "type": self.parameters.type,
-                        "properties": self.parameters.properties.model_dump(),
-                        "required": self.parameters.required,
-                    },
+        return {
+            "type": "function",
+            "function": {
+                "name": self.name,
+                "description": self.description,
+                "parameters": {
+                    "type": self.parameters.type,
+                    "properties": self.parameters.properties.model_dump(),
+                    "required": self.parameters.required,
                 },
-            }
-        )
+            },
+        }

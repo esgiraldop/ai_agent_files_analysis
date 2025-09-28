@@ -13,6 +13,7 @@ list_of_tuples_adapter = TypeAdapter(list[tuple[int, str]])
 action_adapter = TypeAdapter("Action | None")
 action_list_adapter = TypeAdapter(list["Action"])
 str_list_adapter = TypeAdapter(list[str])
+dict_list_adapter = TypeAdapter(list[dict])
 
 
 class RoleEnum(str, Enum):
